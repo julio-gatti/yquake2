@@ -881,3 +881,13 @@ endif()
 
 endif()
 
+# Discord Game SDK
+set(DISCORD_GAME_SDK ON CACHE BOOL "Discord Game SDK")
+if(WIN32)
+	set(DISCORD_GAME_SDK_LIBRARY discord_game_sdk.dll.lib CACHE FILEPATH "Discord Game SDK library")
+else()
+	set(DISCORD_GAME_SDK_LIBRARY discord_game_sdk CACHE FILEPATH "Discord Game SDK library")
+endif()
+if(DISCORD_GAME_SDK)
+	target_link_libraries(quake2 ${DISCORD_GAME_SDK_LIBRARY})
+endif()

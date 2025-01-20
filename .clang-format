@@ -2,7 +2,7 @@
 BasedOnStyle: LLVM
 ---
 Language: Cpp
-BreakAfterReturnType: AllDefinitions
+#BreakAfterReturnType: AllDefinitions
 BreakBeforeBraces: Allman
 ColumnLimit: 0
 IndentWidth: 4
