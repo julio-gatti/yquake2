@@ -677,8 +677,8 @@ void T_RadiusDamage(edict_t *inflictor, edict_t *attacker,
 #define DAMAGE_BULLET 0x00000010 /* damage is from a bullet (used for ricochets) */
 #define DAMAGE_NO_PROTECTION 0x00000020 /* armor, shields, invulnerability, and godmode have no effect */
 
-#define DEFAULT_BULLET_HSPREAD 300
-#define DEFAULT_BULLET_VSPREAD 500
+#define DEFAULT_BULLET_HSPREAD 300 // horizontal spread for machinegun and chaingun
+#define DEFAULT_BULLET_VSPREAD 500 // vertical spread for machinegun and chaingun
 #define DEFAULT_SHOTGUN_HSPREAD 1000
 #define DEFAULT_SHOTGUN_VSPREAD 500
 #define DEFAULT_DEATHMATCH_SHOTGUN_COUNT 12
