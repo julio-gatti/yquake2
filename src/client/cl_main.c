@@ -27,6 +27,7 @@
 
 #include "header/client.h"
 #include "input/header/input.h"
+#include "header/discord_game_sdk.h"
 
 void CL_ForwardToServer_f(void);
 void CL_Changing_f(void);
