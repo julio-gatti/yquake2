@@ -1,5 +1,7 @@
+/.vs/
 /build/
 /release/
+/out/
 *.mk
 *.user
 *.d
