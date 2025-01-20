@@ -1123,15 +1123,27 @@ Cmd_Find_f(void)
 {
 	cmd_function_t *cmd;
 	int i;
+	int printed;
+
+	if (cmd_argc < 2)
+	{
+		Com_Printf("%s <substring>\n", cmd_argv[0]);
+		return;
+	}
 
 	i = 0;
+	printed = 0;
 
 	for (cmd = cmd_functions; cmd; cmd = cmd->next, i++)
 	{
-		Com_Printf("%s\n", cmd->name);
+		if (strstr(cmd->name, cmd_argv[1]))
+		{
+			Com_Printf("%s\n", cmd->name);
+			++printed;
+		}
 	}
 
-	Com_Printf("%i commands\n", i);
+	Com_Printf("%i commands\n", printed);
 }
 
 void
