@@ -65,7 +65,7 @@ option(CURL_SUPPORT "cURL support" ON)
 option(OPENAL_SUPPORT "OpenAL support" ON)
 option(SYSTEMWIDE_SUPPORT "Enable systemwide installation of game assets" OFF)
 option(SDL3_SUPPORT "Build against SDL 3 instead of SDL2" OFF)
-option(GL1_RENDERER "Build the GL3 renderer" ON)
+option(GL1_RENDERER "Build the GL1 renderer" ON)
 option(GL3_RENDERER "Build the GL3 renderer" ON)
 option(GLES1_RENDERER "Build the GLES1 renderer" OFF)
 option(GLES3_RENDERER "Build the GLES3 renderer" ON)
@@ -717,6 +717,13 @@ set(SOFT-Header
 
 # Main Quake 2 executable
 
+set(USE_DISCORD_GAME_SDK ON CACHE BOOL "Use Discord Game SDK")
+if(WIN32)
+	set(DISCORD_GAME_SDK_LIBRARY "discord_game_sdk.dll.lib" CACHE FILEPATH "Discord Game SDK library")
+else()
+	set(DISCORD_GAME_SDK_LIBRARY "discord_game_sdk" CACHE FILEPATH "Discord Game SDK library")
+endif()
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	add_executable(yquake2 WIN32 ${Client-Source} ${Client-SDL-Source} ${Client-Header}
 			${Platform-Specific-Source} ${Backends-Generic-Source})
@@ -727,6 +734,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 			${yquake2SDLLinkerFlags} ${yquake2ZLibLinkerFlags} ws2_32 winmm)
 	if(SDL3_SUPPORT)
 		target_link_libraries(yquake2 SDL3::SDL3)
+	endif()
+	if(USE_DISCORD_GAME_SDK)
+		target_compile_definitions(yquake2 PRIVATE USE_DISCORD_GAME_SDK=1)
+		target_link_libraries(yquake2 ${DISCORD_GAME_SDK_LIBRARY})
 	endif()
 
 	if(MSVC AND CMAKE_MAJOR_VERSION GREATER 3 OR ( CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 6 ))
@@ -879,16 +890,4 @@ if(SDL3_SUPPORT)
 	target_link_libraries(ref_gles1 SDL3::SDL3)
 endif()
 
-endif()
-
-# Discord Game SDK
-set(USE_DISCORD_GAME_SDK ON CACHE BOOL "Use Discord Game SDK")
-if(WIN32)
-	set(DISCORD_GAME_SDK_LIBRARY discord_game_sdk.dll.lib CACHE FILEPATH "Discord Game SDK library")
-else()
-	set(DISCORD_GAME_SDK_LIBRARY discord_game_sdk CACHE FILEPATH "Discord Game SDK library")
-endif()
-if(USE_DISCORD_GAME_SDK)
-	add_compile_definitions(USE_DISCORD_GAME_SDK)
-	target_link_libraries(quake2 ${DISCORD_GAME_SDK_LIBRARY})
 endif()

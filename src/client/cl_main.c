@@ -499,7 +499,7 @@ void CL_CurrentMap_f(void)
 	Com_Printf("%s\n", cl.configstrings[CS_MODELS + 1]);
 }
 
-#ifdef _DISCORD_GAME_SDK_H_
+#ifdef USE_DISCORD_GAME_SDK
 #define DISCORD_REQUIRE(x) if (x != DiscordResult_Ok) abort()
 
 struct Application
@@ -559,12 +559,12 @@ void DISCORD_CALLBACK OnRelationshipsRefresh(void *data)
 			   relationship.user.username,
 			   relationship.user.discriminator);
 	}
-	printf("(%d friends less cool than you omitted)\n", unfiltered_count - filtered_count);
+	//printf("(%d friends less cool than you omitted)\n", unfiltered_count - filtered_count);
 
 	struct DiscordActivity activity;
 	memset(&activity, 0, sizeof(activity));
-	sprintf(activity.details, "Cooler than %d friends", unfiltered_count - filtered_count);
-	sprintf(activity.state, "%d friends total", unfiltered_count);
+	//snprintf(activity.details, sizeof(activity.details), "bruh");
+	//snprintf(activity.state, "%s", name->string);
 
 	app->activities->update_activity(app->activities, &activity, app, UpdateActivityCallback);
 }
@@ -744,7 +744,7 @@ CL_InitLocal(void)
 	Cmd_AddCommand("spawnonstart", NULL);
 	Cmd_AddCommand("cycleweap", NULL);
 
-#ifdef _DISCORD_GAME_SDK_H_
+#ifdef USE_DISCORD_GAME_SDK
 	memset(&discord_app, 0, sizeof(discord_app));
 
 	static struct IDiscordUserEvents users_events;
@@ -760,7 +760,7 @@ CL_InitLocal(void)
 
 	static struct DiscordCreateParams params;
 	DiscordCreateParamsSetDefault(&params);
-	params.client_id = 418559331265675294;
+	params.client_id = 1331334916872474665;
 	params.flags = DiscordCreateFlags_Default;
 	params.event_data = &discord_app;
 	params.activity_events = &activities_events;
@@ -997,8 +997,10 @@ CL_Frame(int packetdelta, int renderdelta, int timedelta, qboolean packetframe, 
 #endif
 	}
 
-#ifdef _DISCORD_GAME_SDK_H_
-	DISCORD_REQUIRE(discord_app.core->run_callbacks(discord_app.core));
+#ifdef USE_DISCORD_GAME_SDK
+	if (discord_app.core) {
+		DISCORD_REQUIRE(discord_app.core->run_callbacks(discord_app.core));
+	}
 #endif
 
 	if (renderframe)
