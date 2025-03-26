@@ -1117,6 +1117,44 @@ Cmd_List_f(void)
 	Com_Printf("%i commands\n", i);
 }
 
+static void
+Cmd_Find_f(void)
+{
+	cmd_function_t *cmd;
+	cvar_t *var;
+	int i;
+	int printed;
+
+	if (cmd_argc < 2)
+	{
+		Com_Printf("%s <substring>\n", cmd_argv[0]);
+		return;
+	}
+
+	i = 0;
+	printed = 0;
+
+	for (cmd = cmd_functions; cmd; cmd = cmd->next, i++)
+	{
+		if (strstr(cmd->name, cmd_argv[1]))
+		{
+			Com_Printf("%s\n", cmd->name);
+			++printed;
+		}
+	}
+
+	for (var = cvar_vars; var; var = var->next, i++)
+	{
+		if (strstr(var->name, cmd_argv[1]))
+		{
+			Com_Printf("%s %s\n", var->name, var->string);
+			++printed;
+		}
+	}
+
+	Com_Printf("%i results\n", printed);
+}
+
 void
 Cmd_Init(void)
 {
@@ -1127,6 +1165,7 @@ Cmd_Init(void)
 	Cmd_AddCommand("echo", Cmd_Echo_f);
 	Cmd_AddCommand("alias", Cmd_Alias_f);
 	Cmd_AddCommand("wait", Cmd_Wait_f);
+	Cmd_AddCommand("find", Cmd_Find_f);
 }
 
 void
